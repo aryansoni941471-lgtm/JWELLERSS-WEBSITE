@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAXMINARAYAN JWELLERS Investment | Digital Gold & Silver Vault</title>
+    <meta name="description" content="Buy and Sell 24K Digital Gold and 99.9% Pure Silver instantly at live market rates. Secure your wealth with LJS digital vault.">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .invest-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 30px;
+        }
+
+        .invest-card {
+            background: var(--bg-surface);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius-lg);
+            padding: 35px;
+            box-shadow: var(--shadow-intense);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .invest-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gold-primary), var(--gold-dark));
+        }
+
+        .invest-card.silver-card::before {
+            background: linear-gradient(90deg, var(--silver-primary), var(--silver-dark));
+        }
+
+        .invest-header {
+            margin-bottom: 25px;
+        }
+
+        .invest-title {
+            font-family: var(--font-heading);
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .invest-rate-box {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius-md);
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .rate-digit {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-gold);
+        }
+
+        .silver-card .rate-digit {
+            color: var(--silver-primary);
+        }
+
+        .invest-toggle {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: var(--border-radius-sm);
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .invest-toggle-btn {
+            padding: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        .invest-toggle-btn.active {
+            background: var(--gold-primary);
+            color: var(--bg-dark);
+            border-radius: var(--border-radius-sm);
+        }
+
+        .silver-card .invest-toggle-btn.active {
+            background: var(--silver-primary);
+            color: var(--bg-dark);
+        }
+
+        .invest-form {
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .invest-form.active {
+            display: flex;
+        }
+
+        .btn-gold-action {
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
+            color: var(--bg-dark);
+            padding: 14px;
+            border-radius: var(--border-radius-sm);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05rem;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .btn-gold-action:hover {
+            box-shadow: 0 0 15px var(--gold-glow);
+        }
+
+        .btn-silver-action {
+            background: linear-gradient(135deg, var(--silver-primary), var(--silver-dark));
+            color: var(--bg-dark);
+            padding: 14px;
+            border-radius: var(--border-radius-sm);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05rem;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .btn-silver-action:hover {
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+
+        .live-preview-box {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 5px;
+            display: block;
+        }
+
+        .live-preview-box strong {
+            color: var(--text-primary);
+        }
+
+        @media (max-width: 900px) {
+            .invest-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header rates ticker -->
+    <header>
+        <div class="rates-ticker-bar">
+            <div class="rates-wrapper">
+                <div class="rate-item">
+                    <span class="rate-indicator"></span>
+                    <span class="rate-label">Gold 24K (10g):</span>
+                    <span class="rate-val" id="tick-gold-24k">₹0</span>
+                </div>
+                <div class="rate-item">
+                    <span class="rate-indicator"></span>
+                    <span class="rate-label">Gold 22K (10g):</span>
+                    <span class="rate-val" id="tick-gold-22k">₹0</span>
+                </div>
+                <div class="rate-item">
+                    <span class="rate-indicator"></span>
+                    <span class="rate-label">Silver (1kg):</span>
+                    <span class="rate-val" id="tick-silver">₹0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Bar -->
+        <nav class="navbar">
+            <div class="nav-brand" onclick="window.location.href='index.html'">
+                LAXMINARAYAN JWELLERS
+            </div>
+            
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#shop">Collections</a></li>
+                <li><a href="calculator.html">Calculator</a></li>
+                <li><a href="investment.html" class="active-link">Investment</a></li>
+                <li><a href="index.html#profile">My Profile</a></li>
+                <li><a href="index.html#admin">Admin Panel</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <button class="auth-trigger-btn" onclick="window.location.href='index.html#auth'">
+                    My Account
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="view-section active">
+        <div class="section-header" style="margin-top: 0;">
+            <span class="section-subtitle">Asset Management</span>
+            <h1 class="section-title">Digital Metal Vault</h1>
+            <p style="color: var(--text-secondary); margin-top: 10px;">Buy and Sell pure 24K Gold and 99.9% Silver as an investment. Your assets will be securely saved in the LJS Digital Vault upon admin approval.</p>
+            <div class="section-divider"></div>
+        </div>
+
+        <div class="invest-grid">
+            <!-- GOLD INVESTMENT CARD -->
+            <div class="invest-card">
+                <div class="invest-header">
+                    <h2 class="invest-title" style="color: var(--text-gold);">24K Digital Gold</h2>
+                    <p style="color: var(--text-secondary); font-size: 0.85rem;">99.9% Purity Guaranteed. Certified Vault holdings.</p>
+                </div>
+
+                <div class="invest-rate-box">
+                    <span style="font-size: 0.85rem; text-transform: uppercase; color: var(--text-secondary);">Current Buy Rate</span>
+                    <span class="rate-digit" id="gold-gram-rate">₹0.00 /g</span>
+                </div>
+
+                <div class="invest-toggle">
+                    <button class="invest-toggle-btn active" id="toggle-gold-buy" onclick="switchGoldTab('buy')">Buy Gold</button>
+                    <button class="invest-toggle-btn" id="toggle-gold-sell" onclick="switchGoldTab('sell')">Sell Gold</button>
+                </div>
+
+                <!-- Buy Gold Form -->
+                <form id="form-gold-buy" class="invest-form active" onsubmit="submitMetalTrade(event, 'gold', 'buy')">
+                    <div class="form-group">
+                        <label for="gold-buy-amount">Enter Amount (₹)</label>
+                        <input type="number" id="gold-buy-amount" class="form-input" placeholder="e.g. ₹5,000" min="100" oninput="calcGoldTrade('buy', 'amount')" required>
+                        <span class="live-preview-box" id="gold-buy-weight-preview">Estimated Weight: <strong>0.0000 grams</strong></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gold-buy-paymethod">Payment Method</label>
+                        <select id="gold-buy-paymethod" class="sort-select" style="height: 48px;" onchange="toggleBuyPaymethod('gold')" required>
+                            <option value="razorpay">Online Payment (Razorpay)</option>
+                            <option value="upi">UPI / Online Payment (Scan QR)</option>
+                            <option value="bank">Bank Transfer</option>
+                        </select>
+                    </div>
+
+                    <!-- UPI Details Container -->
+                    <div id="gold-buy-upi-details" style="background: rgba(212,175,55,0.04); border: 1px solid var(--gold-border); padding: 15px; border-radius: var(--border-radius-sm); text-align: center;">
+                        <span style="font-size: 0.8rem; font-weight:600; color: var(--text-gold); display:block; margin-bottom: 5px;">Scan QR to Pay via UPI</span>
+                        <img src="images/upi_qr.png" alt="UPI QR" style="width: 140px; height: 140px; margin: 0 auto 5px; display: block; border-radius: var(--border-radius-sm); border: 1px solid rgba(255,255,255,0.05);">
+                        <span style="font-size: 0.75rem; color: var(--text-secondary); display:block; margin-bottom: 10px;">UPI ID: <strong>9216953892@ybl</strong></span>
+                        
+                        <div class="form-group" style="text-align: left;">
+                            <label for="gold-buy-utr">Enter Transaction ID / UTR (Required)</label>
+                            <input type="text" id="gold-buy-utr" class="form-input" placeholder="Enter 12-digit UPI UTR" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-gold-action">Request Buy Approval</button>
+                </form>
+
+                <!-- Sell Gold Form -->
+                <form id="form-gold-sell" class="invest-form" onsubmit="submitMetalTrade(event, 'gold', 'sell')">
+                    <div class="form-group">
+                        <label for="gold-sell-weight">Enter Weight (grams)</label>
+                        <input type="number" id="gold-sell-weight" class="form-input" placeholder="e.g. 2.5g" min="0.001" step="0.001" oninput="calcGoldTrade('sell', 'weight')" required>
+                        <span class="live-preview-box" id="gold-sell-cash-preview">Estimated Payout: <strong>₹0.00</strong></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gold-sell-payout">Receive Payout Destination</label>
+                        <input type="text" id="gold-sell-payout" class="form-input" placeholder="Enter your UPI ID or Bank A/C No + IFSC" required>
+                    </div>
+
+                    <button type="submit" class="btn-gold-action">Request Sell Approval</button>
+                </form>
+            </div>
+
+            <!-- SILVER INVESTMENT CARD -->
+            <div class="invest-card silver-card">
+                <div class="invest-header">
+                    <h2 class="invest-title" style="color: var(--silver-primary);">99.9% Pure Silver</h2>
+                    <p style="color: var(--text-secondary); font-size: 0.85rem;">Fine bullion silver. Liquid exchange rates.</p>
+                </div>
+
+                <div class="invest-rate-box">
+                    <span style="font-size: 0.85rem; text-transform: uppercase; color: var(--text-secondary);">Current Buy Rate</span>
+                    <span class="rate-digit" id="silver-gram-rate">₹0.00 /g</span>
+                </div>
+
+                <div class="invest-toggle">
+                    <button class="invest-toggle-btn active" id="toggle-silver-buy" onclick="switchSilverTab('buy')">Buy Silver</button>
+                    <button class="invest-toggle-btn" id="toggle-silver-sell" onclick="switchSilverTab('sell')">Sell Silver</button>
+                </div>
+
+                <!-- Buy Silver Form -->
+                <form id="form-silver-buy" class="invest-form active" onsubmit="submitMetalTrade(event, 'silver', 'buy')">
+                    <div class="form-group">
+                        <label for="silver-buy-amount">Enter Amount (₹)</label>
+                        <input type="number" id="silver-buy-amount" class="form-input" placeholder="e.g. ₹2,000" min="100" oninput="calcSilverTrade('buy', 'amount')" required>
+                        <span class="live-preview-box" id="silver-buy-weight-preview">Estimated Weight: <strong>0.0000 grams</strong></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="silver-buy-paymethod">Payment Method</label>
+                        <select id="silver-buy-paymethod" class="sort-select" style="height: 48px;" onchange="toggleBuyPaymethod('silver')" required>
+                            <option value="razorpay">Online Payment (Razorpay)</option>
+                            <option value="upi">UPI / Online Payment (Scan QR)</option>
+                            <option value="bank">Bank Transfer</option>
+                        </select>
+                    </div>
+
+                    <!-- UPI Details Container -->
+                    <div id="silver-buy-upi-details" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 15px; border-radius: var(--border-radius-sm); text-align: center;">
+                        <span style="font-size: 0.8rem; font-weight:600; color: var(--text-primary); display:block; margin-bottom: 5px;">Scan QR to Pay via UPI</span>
+                        <img src="images/upi_qr.png" alt="UPI QR" style="width: 140px; height: 140px; margin: 0 auto 5px; display: block; border-radius: var(--border-radius-sm); border: 1px solid rgba(255,255,255,0.05);">
+                        <span style="font-size: 0.75rem; color: var(--text-secondary); display:block; margin-bottom: 10px;">UPI ID: <strong>9216953892@ybl</strong></span>
+                        
+                        <div class="form-group" style="text-align: left;">
+                            <label for="silver-buy-utr">Enter Transaction ID / UTR (Required)</label>
+                            <input type="text" id="silver-buy-utr" class="form-input" placeholder="Enter 12-digit UPI UTR" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-silver-action">Request Buy Approval</button>
+                </form>
+
+                <!-- Sell Silver Form -->
+                <form id="form-silver-sell" class="invest-form" onsubmit="submitMetalTrade(event, 'silver', 'sell')">
+                    <div class="form-group">
+                        <label for="silver-sell-weight">Enter Weight (grams)</label>
+                        <input type="number" id="silver-sell-weight" class="form-input" placeholder="e.g. 50g" min="0.01" step="0.01" oninput="calcSilverTrade('sell', 'weight')" required>
+                        <span class="live-preview-box" id="silver-sell-cash-preview">Estimated Payout: <strong>₹0.00</strong></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="silver-sell-payout">Receive Payout Destination</label>
+                        <input type="text" id="silver-sell-payout" class="form-input" placeholder="Enter your UPI ID or Bank A/C No + IFSC" required>
+                    </div>
+
+                    <button type="submit" class="btn-silver-action">Request Sell Approval</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-col-brand">
+                <h3>LAXMINARAYAN JWELLERS</h3>
+                <p>Delivering high-end luxury, premium craftsmanship, and guaranteed metal purity since 1998.</p>
+                <div class="footer-socials">
+                    <a href="#" class="social-icon">f</a>
+                    <a href="#" class="social-icon">t</a>
+                    <a href="#" class="social-icon">i</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Collections</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html#shop">Gold Rings</a></li>
+                    <li><a href="index.html#shop">Bridal Sets</a></li>
+                    <li><a href="index.html#shop">Diamond Ornaments</a></li>
+                    <li><a href="index.html#shop">Sterling Silver</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contact Us</h4>
+                <div class="footer-contact">
+                    <div class="footer-contact-item">
+                        <span>📍</span>
+                        <span>LAXMINARAYAN Luxury Plaza, Noida, India</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <span>📞</span>
+                        <span>+91 98765 43210</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div>&copy; 2026 LAXMINARAYAN JWELLERS. All Rights Reserved.</div>
+            <div style="color: var(--text-gold);">100% Hallmarked & Certified Jewellery</div>
+        </div>
+    </footer>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        const defaultRates = {
+            gold24k: 72500,
+            gold22k: 66500,
+            silver: 89000
+        };
+
+        let rates = {};
+        let currentUser = null;
+
+        // Load rates and active session
+        function initializePage() {
+            try {
+                rates = JSON.parse(localStorage.getItem('ljs_rates')) || defaultRates;
+                currentUser = JSON.parse(localStorage.getItem('ljs_current_user')) || null;
+            } catch(e) {
+                rates = defaultRates;
+            }
+            updateRatesUI();
+        }
+
+        function updateRatesUI() {
+            // Header tickers
+            document.getElementById('tick-gold-24k').innerText = `₹${rates.gold24k.toLocaleString('en-IN')}`;
+            document.getElementById('tick-gold-22k').innerText = `₹${rates.gold22k.toLocaleString('en-IN')}`;
+            document.getElementById('tick-silver').innerText = `₹${rates.silver.toLocaleString('en-IN')}`;
+
+            // Gram rates
+            const goldGram = rates.gold24k / 10;
+            const silverGram = rates.silver / 1000;
+            document.getElementById('gold-gram-rate').innerText = `₹${goldGram.toFixed(2)} /g`;
+            document.getElementById('silver-gram-rate').innerText = `₹${silverGram.toFixed(2)} /g`;
+        }
+
+        // Toggles tab inside cards
+        function switchGoldTab(type) {
+            document.getElementById('toggle-gold-buy').classList.remove('active');
+            document.getElementById('toggle-gold-sell').classList.remove('active');
+            document.getElementById('form-gold-buy').classList.remove('active');
+            document.getElementById('form-gold-sell').classList.remove('active');
+
+            if (type === 'buy') {
+                document.getElementById('toggle-gold-buy').classList.add('active');
+                document.getElementById('form-gold-buy').classList.add('active');
+            } else {
+                document.getElementById('toggle-gold-sell').classList.add('active');
+                document.getElementById('form-gold-sell').classList.add('active');
+            }
+        }
+
+        function switchSilverTab(type) {
+            document.getElementById('toggle-silver-buy').classList.remove('active');
+            document.getElementById('toggle-silver-sell').classList.remove('active');
+            document.getElementById('form-silver-buy').classList.remove('active');
+            document.getElementById('form-silver-sell').classList.remove('active');
+
+            if (type === 'buy') {
+                document.getElementById('toggle-silver-buy').classList.add('active');
+                document.getElementById('form-silver-buy').classList.add('active');
+            } else {
+                document.getElementById('toggle-silver-sell').classList.add('active');
+                document.getElementById('form-silver-sell').classList.add('active');
+            }
+        }
+
+        // Toggle paymethod detail visibility on buy
+        function toggleBuyPaymethod(metal) {
+            const method = document.getElementById(`${metal}-buy-paymethod`).value;
+            const upiDetails = document.getElementById(`${metal}-buy-upi-details`);
+            const utrInput = document.getElementById(`${metal}-buy-utr`);
+            
+            if (method === 'upi') {
+                upiDetails.style.display = 'block';
+                utrInput.required = true;
+            } else {
+                upiDetails.style.display = 'none';
+                utrInput.required = false;
+                utrInput.value = '';
+            }
+        }
+
+        // Live calculator previews
+        function calcGoldTrade(tab) {
+            const goldGram = rates.gold24k / 10;
+            if (tab === 'buy') {
+                const amount = parseFloat(document.getElementById('gold-buy-amount').value) || 0;
+                const weight = amount / goldGram;
+                document.getElementById('gold-buy-weight-preview').innerHTML = `Estimated Weight: <strong>${weight.toFixed(4)} grams</strong>`;
+            } else {
+                const weight = parseFloat(document.getElementById('gold-sell-weight').value) || 0;
+                const cash = weight * goldGram;
+                document.getElementById('gold-sell-cash-preview').innerHTML = `Estimated Payout: <strong>₹${Math.round(cash).toLocaleString('en-IN')}</strong>`;
+            }
+        }
+
+        function calcSilverTrade(tab) {
+            const silverGram = rates.silver / 1000;
+            if (tab === 'buy') {
+                const amount = parseFloat(document.getElementById('silver-buy-amount').value) || 0;
+                const weight = amount / silverGram;
+                document.getElementById('silver-buy-weight-preview').innerHTML = `Estimated Weight: <strong>${weight.toFixed(4)} grams</strong>`;
+            } else {
+                const weight = parseFloat(document.getElementById('silver-sell-weight').value) || 0;
+                const cash = weight * silverGram;
+                document.getElementById('silver-sell-cash-preview').innerHTML = `Estimated Payout: <strong>₹${Math.round(cash).toLocaleString('en-IN')}</strong>`;
+            }
+        }
+
+        // Form Submit
+        function submitMetalTrade(e, metal, type) {
+            e.preventDefault();
+            if (!currentUser) {
+                alert("Please log in to your account first before trading digital assets.");
+                window.location.href = "index.html#auth";
+                return;
+            }
+
+            const txId = "TX-" + Math.floor(100000 + Math.random() * 900000);
+            const ratePerGram = metal === 'gold' ? (rates.gold24k / 10) : (rates.silver / 1000);
+            
+            let weight = 0;
+            let amount = 0;
+            let paymentDetails = "";
+            let method = "";
+
+            if (type === 'buy') {
+                amount = parseFloat(document.getElementById(`${metal}-buy-amount`).value);
+                weight = amount / ratePerGram;
+                
+                method = document.getElementById(`${metal}-buy-paymethod`).value;
+                const utr = document.getElementById(`${metal}-buy-utr`).value.trim();
+                paymentDetails = method === 'upi' ? `UPI (UTR: ${utr})` : (method === 'bank' ? 'Bank Transfer' : 'Razorpay Online');
+            } else {
+                weight = parseFloat(document.getElementById(`${metal}-sell-weight`).value);
+                amount = weight * ratePerGram;
+                paymentDetails = document.getElementById(`${metal}-sell-payout`).value.trim();
+                
+                // Purity/payout verification for selling: Check balance of current user in localStorage
+                const users = JSON.parse(localStorage.getItem('ljs_users'));
+                const matched = users.find(u => u.email.toLowerCase() === currentUser.email.toLowerCase());
+                const userBal = metal === 'gold' ? (matched.goldBalance || 0) : (matched.silverBalance || 0);
+
+                if (weight > userBal) {
+                    alert(`Insufficient balance! Your current digital ${metal} holding is ${userBal.toFixed(4)}g. You cannot sell more than your balance.`);
+                    return;
+                }
+            }
+
+            // Create transaction request structure
+            const transaction = {
+                txId: txId,
+                customerEmail: currentUser.email,
+                customerName: currentUser.name,
+                metal: metal,
+                type: type, // buy or sell
+                weight: weight.toFixed(4) + "g",
+                amount: "₹" + Math.round(amount).toLocaleString('en-IN'),
+                status: "Pending",
+                dateTime: new Date().toLocaleString(),
+                paymentDetails: paymentDetails
+            };
+
+            const executeSaveAndRedirect = (finalTx, updatedUsers = null) => {
+                const allTransactions = JSON.parse(localStorage.getItem('ljs_transactions')) || [];
+                allTransactions.unshift(finalTx);
+                localStorage.setItem('ljs_transactions', JSON.stringify(allTransactions));
+
+                if (updatedUsers) {
+                    localStorage.setItem('ljs_users', JSON.stringify(updatedUsers));
+                }
+
+                // Package full database payload
+                const currentInventory = JSON.parse(localStorage.getItem('ljs_inventory')) || [];
+                const currentOrders = JSON.parse(localStorage.getItem('ljs_orders')) || [];
+                const usersToSave = updatedUsers || JSON.parse(localStorage.getItem('ljs_users')) || [];
+                
+                const dbPayload = {
+                    rates: rates,
+                    inventory: currentInventory,
+                    orders: currentOrders,
+                    users: usersToSave,
+                    transactions: allTransactions
+                };
+
+                return fetch('/api/save', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dbPayload)
+                })
+                .then(res => res.json())
+                .then(data => {
+                    e.target.reset();
+                    // Reset previews
+                    if (metal === 'gold') {
+                        document.getElementById('gold-buy-weight-preview').innerHTML = `Estimated Weight: <strong>0.0000 grams</strong>`;
+                        document.getElementById('gold-sell-cash-preview').innerHTML = `Estimated Payout: <strong>₹0.00</strong>`;
+                    } else {
+                        document.getElementById('silver-buy-weight-preview').innerHTML = `Estimated Weight: <strong>0.0000 grams</strong>`;
+                        document.getElementById('silver-sell-cash-preview').innerHTML = `Estimated Payout: <strong>₹0.00</strong>`;
+                    }
+                    
+                    // Redirect to Profile view
+                    window.location.href = "index.html#profile";
+                });
+            };
+
+            if (type === 'buy' && method === 'razorpay') {
+                // Fetch key and create order on backend
+                fetch('/api/payment-config')
+                    .then(res => res.json())
+                    .then(config => {
+                        const keyId = config.keyId;
+                        
+                        return fetch('/api/create-razorpay-order', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ amount: amount })
+                        })
+                        .then(res => {
+                            if (!res.ok) throw new Error('Failed to create payment order');
+                            return res.json();
+                        })
+                        .then(rzpOrder => {
+                            const options = {
+                                key: keyId,
+                                amount: rzpOrder.amount,
+                                currency: rzpOrder.currency,
+                                name: "LAXMINARAYAN JWELLERS Digital Investment",
+                                description: `Buy ${weight.toFixed(4)}g of ${metal}`,
+                                order_id: rzpOrder.id,
+                                handler: function (response) {
+                                    // Verify payment signature on backend
+                                    fetch('/api/verify-razorpay-payment', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({
+                                            razorpay_order_id: response.razorpay_order_id,
+                                            razorpay_payment_id: response.razorpay_payment_id,
+                                            razorpay_signature: response.razorpay_signature
+                                        })
+                                    })
+                                    .then(res => res.json())
+                                    .then(verification => {
+                                        if (verification.success) {
+                                            const finalTx = {
+                                                ...transaction,
+                                                status: "Approved", // Approved instantly on successful verified payment
+                                                paymentDetails: `Razorpay Online (ID: ${response.razorpay_payment_id})`
+                                            };
+
+                                            // Adjust customer holdings instantly
+                                            const users = JSON.parse(localStorage.getItem('ljs_users')) || [];
+                                            const customer = users.find(u => u.email.toLowerCase() === currentUser.email.toLowerCase());
+                                            if (customer) {
+                                                if (customer.goldBalance === undefined) customer.goldBalance = 0;
+                                                if (customer.silverBalance === undefined) customer.silverBalance = 0;
+                                                
+                                                if (metal === 'gold') {
+                                                    customer.goldBalance += weight;
+                                                } else {
+                                                    customer.silverBalance += weight;
+                                                }
+                                                
+                                                // Sync currentUser object
+                                                currentUser.goldBalance = customer.goldBalance;
+                                                currentUser.silverBalance = customer.silverBalance;
+                                                localStorage.setItem('ljs_current_user', JSON.stringify(currentUser));
+                                            }
+
+                                            executeSaveAndRedirect(finalTx, users)
+                                            .then(() => {
+                                                alert(`Successfully purchased ${weight.toFixed(4)}g digital ${metal}! Your vault holding has been updated.`);
+                                            })
+                                            .catch(err => {
+                                                console.error("Save error:", err);
+                                                alert("Payment succeeded but failed to sync transaction log.");
+                                            });
+                                        } else {
+                                            alert("Payment verification failed! " + verification.error);
+                                        }
+                                    })
+                                    .catch(err => {
+                                        console.error("Verification error:", err);
+                                        alert("Failed to verify payment with server.");
+                                    });
+                                },
+                                prefill: {
+                                    name: currentUser.name,
+                                    email: currentUser.email
+                                },
+                                theme: {
+                                    color: metal === 'gold' ? "#d4af37" : "#a6a6a6"
+                                }
+                            };
+                            
+                            const rzp = new Razorpay(options);
+                            rzp.on('payment.failed', function (response) {
+                                alert("Payment failed: " + response.error.description);
+                            });
+                            rzp.open();
+                        });
+                    })
+                    .catch(err => {
+                        console.error("Payment error:", err);
+                        alert("An error occurred while initiating online payment.");
+                    });
+                    
+                return;
+            }
+
+            // Normal manual flows (UPI QR / Bank Transfer / Sell)
+            executeSaveAndRedirect(transaction)
+            .then(() => {
+                alert(`Transaction request ${txId} has been submitted! It is currently 'Pending Approval' by the Admin.`);
+            })
+            .catch(err => {
+                console.error("Error saving trade request:", err);
+                alert("Failed to submit trade request to server.");
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initializePage();
+        });
+    </script>
+</body>
+</html>

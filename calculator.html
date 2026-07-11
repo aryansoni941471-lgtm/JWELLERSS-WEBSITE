@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAXMINARAYAN JWELLERS Calculator | Gold & Silver Valuation</title>
+    <meta name="description" content="Calculate current values of new and old jewelry ornaments dynamically based on LJS live Gold & Silver market rates.">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Calculator Custom Styles to match styles.css luxury theme */
+        .calc-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 20px;
+        }
+
+        .calc-card {
+            background: var(--bg-surface);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius-lg);
+            padding: 30px;
+            box-shadow: var(--shadow-intense);
+        }
+
+        .calc-receipt {
+            background: linear-gradient(135deg, #161512 0%, #0d0c0a 100%);
+            border: 1px solid var(--gold-border);
+            border-radius: var(--border-radius-lg);
+            padding: 35px;
+            position: relative;
+            box-shadow: var(--shadow-gold);
+            height: fit-content;
+        }
+
+        .receipt-header {
+            text-align: center;
+            border-bottom: 1px dashed var(--gold-border);
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+        }
+
+        .receipt-title {
+            font-family: var(--font-heading);
+            color: var(--gold-primary);
+            font-size: 1.4rem;
+            letter-spacing: 0.1rem;
+            text-transform: uppercase;
+        }
+
+        .receipt-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05rem;
+            margin-top: 5px;
+        }
+
+        .receipt-line {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .receipt-line.highlight {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .receipt-line.total {
+            border-top: 1px dashed var(--gold-border);
+            padding-top: 20px;
+            margin-top: 25px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-gold);
+        }
+
+        .calc-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: var(--border-radius-md);
+            overflow: hidden;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .calc-tab-btn {
+            padding: 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-bottom: 2px solid transparent;
+            text-align: center;
+        }
+
+        .calc-tab-btn.active {
+            background: rgba(212, 175, 55, 0.05);
+            color: var(--gold-primary);
+            border-bottom-color: var(--gold-primary);
+        }
+
+        .calc-form {
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .calc-form.active {
+            display: flex;
+        }
+
+        .calc-note {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            background: rgba(212, 175, 55, 0.05);
+            border: 1px solid var(--gold-border);
+            padding: 12px;
+            border-radius: var(--border-radius-sm);
+            margin-top: 10px;
+            line-height: 1.4;
+        }
+
+        .calc-note strong {
+            color: var(--text-gold);
+        }
+
+        @media (max-width: 900px) {
+            .calc-wrapper {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header rates ticker -->
+    <header>
+        <div class="rates-ticker-bar">
+            <div class="rates-wrapper">
+                <div class="rate-item">
+                    <span class="rate-indicator"></span>
+                    <span class="rate-label">Gold 24K (10g):</span>
+                    <span class="rate-val" id="tick-gold-24k">₹0</span>
+                </div>
+                <div class="rate-item">
+                    <span class="rate-indicator"></span>
+                    <span class="rate-label">Gold 22K (10g):</span>
+                    <span class="rate-val" id="tick-gold-22k">₹0</span>
+                </div>
+                <div class="rate-item">
+                    <span class="rate-indicator"></span>
+                    <span class="rate-label">Silver (1kg):</span>
+                    <span class="rate-val" id="tick-silver">₹0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Bar -->
+        <nav class="navbar">
+            <div class="nav-brand" onclick="window.location.href='index.html'">
+                LAXMINARAYAN JWELLERS
+            </div>
+            
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#shop">Collections</a></li>
+                <li><a href="calculator.html" class="active-link">Calculator</a></li>
+                <li><a href="index.html#admin">Admin Panel</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <button class="auth-trigger-btn" onclick="window.location.href='index.html#auth'">
+                    My Account
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="view-section active">
+        <div class="section-header" style="margin-top: 0;">
+            <span class="section-subtitle">Purity & Valuation</span>
+            <h1 class="section-title">Jewellery Calculator</h1>
+            <div class="section-divider"></div>
+        </div>
+
+        <div class="calc-wrapper">
+            <!-- 1. Interactive Inputs Form -->
+            <div class="calc-card">
+                <div class="calc-tabs">
+                    <button class="calc-tab-btn active" id="tab-new-btn" onclick="switchCalcTab('new')">
+                        New Ornaments Price
+                    </button>
+                    <button class="calc-tab-btn" id="tab-old-btn" onclick="switchCalcTab('old')">
+                        Old Ornaments Exchange/Sell
+                    </button>
+                </div>
+
+                <!-- Form A: New Ornaments Calculator -->
+                <div class="calc-form active" id="form-new">
+                    <div class="form-group">
+                        <label for="new-metal-type">Select Metal Type</label>
+                        <select id="new-metal-type" class="sort-select" style="height: 48px;" onchange="calculateNewEstimates()">
+                            <option value="gold22k">Gold 22K (Showroom Standard)</option>
+                            <option value="gold24k">Gold 24K (Pure Gold)</option>
+                            <option value="silver">Silver</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="new-weight">Weight of Ornament (grams)</label>
+                        <input type="number" id="new-weight" class="form-input" value="10" min="0.01" step="0.01" oninput="calculateNewEstimates()" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="new-making">Making Charges (%)</label>
+                        <input type="number" id="new-making" class="form-input" value="12" min="0" step="0.1" oninput="calculateNewEstimates()" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="new-stones">Stone / Diamond / Pearl Value (₹)</label>
+                        <input type="number" id="new-stones" class="form-input" value="0" min="0" step="1" oninput="calculateNewEstimates()">
+                    </div>
+
+                    <div class="calc-note">
+                        ℹ️ <strong>New Jewellery Formula:</strong> Base metal value (computed from live weight & rate) + Stone Charges + Making Charges + 3% Government GST.
+                    </div>
+                </div>
+
+                <!-- Form B: Old Ornaments exchange value -->
+                <div class="calc-form" id="form-old">
+                    <div class="form-group">
+                        <label for="old-metal-type">Select Metal Type</label>
+                        <select id="old-metal-type" class="sort-select" style="height: 48px;" onchange="handleOldMetalChange()">
+                            <option value="gold">Gold Ornaments</option>
+                            <option value="silver">Silver Ornaments</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="group-gold-purity">
+                        <label for="old-purity-gold">Purity / Karat (Gold)</label>
+                        <select id="old-purity-gold" class="sort-select" style="height: 48px;" onchange="calculateOldEstimates()">
+                            <option value="24">24K (99.9% Pure)</option>
+                            <option value="22" selected>22K (91.6% Pure - Hallmarked)</option>
+                            <option value="20">20K (83.3% Pure)</option>
+                            <option value="18">18K (75.0% Pure)</option>
+                            <option value="14">14K (58.5% Pure)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="group-silver-purity" style="display: none;">
+                        <label for="old-purity-silver">Purity (Silver)</label>
+                        <select id="old-purity-silver" class="sort-select" style="height: 48px;" onchange="calculateOldEstimates()">
+                            <option value="99.9">99.9% (Fine Silver)</option>
+                            <option value="92.5" selected>92.5% (Sterling Silver)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="old-weight">Gross Weight (grams)</label>
+                        <input type="number" id="old-weight" class="form-input" value="10" min="0.01" step="0.01" oninput="calculateOldEstimates()" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="old-stone-weight">Stone Weight Deducated (grams)</label>
+                        <input type="number" id="old-stone-weight" class="form-input" value="0" min="0" step="0.01" oninput="calculateOldEstimates()">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="old-wastage">Melting Wastage / Refining Deduction (%)</label>
+                        <input type="number" id="old-wastage" class="form-input" value="3.0" min="0" step="0.1" oninput="calculateOldEstimates()" required>
+                    </div>
+
+                    <div class="calc-note">
+                        ℹ️ <strong>Old Valuation Formula:</strong> Gross weight minus Stone weight = Net metal. Net metal weight multiplied by purity-adjusted rate. Sell/Exchange value is computed after deducting melt loss percentage.
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Dynamic Estimate Invoice Receipt -->
+            <div class="calc-receipt">
+                <div class="receipt-header">
+                    <div class="receipt-title">LJS Showroom Receipt</div>
+                    <div class="receipt-subtitle" id="receipt-type-label">Estimated Showroom Quote</div>
+                </div>
+
+                <div id="receipt-new-content">
+                    <div class="receipt-line">
+                        <span>Metal Material</span>
+                        <span id="rep-new-metal-label" class="highlight">-</span>
+                    </div>
+                    <div class="receipt-line">
+                        <span>Rate per Gram</span>
+                        <span id="rep-new-gram-rate">-</span>
+                    </div>
+                    <div class="receipt-line">
+                        <span>Gross Weight</span>
+                        <span id="rep-new-weight">-</span>
+                    </div>
+                    <div class="receipt-line">
+                        <span>Metal Base Cost</span>
+                        <span id="rep-new-metal-cost" class="highlight">₹0</span>
+                    </div>
+                    <div class="receipt-line">
+                        <span>Stone & Gems Value</span>
+                        <span id="rep-new-stones-cost">₹0</span>
+                    </div>
+                    <div class="receipt-line">
+                        <span>Making Charges</span>
+                        <span id="rep-new-making-cost">₹0</span>
+                    </div>
+                    <div class="receipt-line">
+                        <span>GST / Taxes (3%)</span>
+                        <span id="rep-new-gst">₹0</span>
+                    </div>
+                    <div class="receipt-line total">
+                        <span>Net Estimated Cost</span>
+                        <span id="rep-new-total">₹0</span>
+                    </div>
+                </div>
+
+                <div id="receipt-old-content" style="display: none;">
+                    <div class="receipt-line">
+                        <span>Ornament Type</span>
+                        <span id="rep-old-metal-label" class="highlight">-</span>
+                    </div>
+                    <div class="receipt-line">
+                        <span>Purity Grade</span>
+                        <span id="rep-old-purity-label">-</span>
+                    </div>
+                    <div class="receipt-line">
+                        <span>Gross Weight</span>
+                        <span id="rep-old-gross-weight">-</span>
+                    </div>
+                    <div class="receipt-line">
+                        <span>Stone Weight Deduction</span>
+                        <span id="rep-old-stone-deduction" style="color: #e63946;">-0g</span>
+                    </div>
+                    <div class="receipt-line">
+                        <span>Net Metal Weight</span>
+                        <span id="rep-old-net-weight" class="highlight">-</span>
+                    </div>
+                    <div class="receipt-line">
+                        <span>Adjusted Gram Rate</span>
+                        <span id="rep-old-gram-rate">-</span>
+                    </div>
+                    <div class="receipt-line">
+                        <span>Gross Value</span>
+                        <span id="rep-old-gross-val">₹0</span>
+                    </div>
+                    <div class="receipt-line">
+                        <span>Melting Loss Deductions</span>
+                        <span id="rep-old-wastage-deduction" style="color: #e63946;">₹0</span>
+                    </div>
+                    <div class="receipt-line total">
+                        <span>Net Cash/Exchange Value</span>
+                        <span id="rep-old-net-val">₹0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-col-brand">
+                <h3>LAXMINARAYAN JWELLERS</h3>
+                <p>Delivering high-end luxury, premium craftsmanship, and guaranteed metal purity since 1998.</p>
+                <div class="footer-socials">
+                    <a href="#" class="social-icon">f</a>
+                    <a href="#" class="social-icon">t</a>
+                    <a href="#" class="social-icon">i</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Collections</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html#shop">Gold Rings</a></li>
+                    <li><a href="index.html#shop">Bridal Sets</a></li>
+                    <li><a href="index.html#shop">Diamond Ornaments</a></li>
+                    <li><a href="index.html#shop">Sterling Silver</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Customer Care</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Purity Guarantee</a></li>
+                    <li><a href="#">Showroom Locator</a></li>
+                    <li><a href="#">Custom Orders</a></li>
+                    <li><a href="#">Support Center</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contact Us</h4>
+                <div class="footer-contact">
+                    <div class="footer-contact-item">
+                        <span>📍</span>
+                        <span>LAXMINARAYAN Luxury Plaza, Noida, India</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <span>📞</span>
+                        <span>+91 98765 43210</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div>&copy; 2026 LAXMINARAYAN JWELLERS. All Rights Reserved.</div>
+            <div style="color: var(--text-gold);">100% Hallmarked & Certified Jewellery</div>
+        </div>
+    </footer>
+
+    <!-- Calculator Logic Script -->
+    <script>
+        // Setup default rates matching data.js
+        const defaultRates = {
+            gold24k: 72500,
+            gold22k: 66500,
+            silver: 89000
+        };
+
+        let rates = {};
+
+        // Load rates from LocalStorage
+        function loadRates() {
+            try {
+                rates = JSON.parse(localStorage.getItem('ljs_rates')) || defaultRates;
+            } catch(e) {
+                rates = defaultRates;
+            }
+            updateTickers();
+        }
+
+        function updateTickers() {
+            document.getElementById('tick-gold-24k').innerText = `₹${rates.gold24k.toLocaleString('en-IN')}`;
+            document.getElementById('tick-gold-22k').innerText = `₹${rates.gold22k.toLocaleString('en-IN')}`;
+            document.getElementById('tick-silver').innerText = `₹${rates.silver.toLocaleString('en-IN')}`;
+        }
+
+        // Tab switches
+        function switchCalcTab(tab) {
+            document.getElementById('tab-new-btn').classList.remove('active');
+            document.getElementById('tab-old-btn').classList.remove('active');
+            document.getElementById('form-new').classList.remove('active');
+            document.getElementById('form-old').classList.remove('active');
+            
+            document.getElementById('receipt-new-content').style.display = 'none';
+            document.getElementById('receipt-old-content').style.display = 'none';
+
+            if (tab === 'new') {
+                document.getElementById('tab-new-btn').classList.add('active');
+                document.getElementById('form-new').classList.add('active');
+                document.getElementById('receipt-new-content').style.display = 'block';
+                document.getElementById('receipt-type-label').innerText = 'Estimated Showroom Quote';
+                calculateNewEstimates();
+            } else {
+                document.getElementById('tab-old-btn').classList.add('active');
+                document.getElementById('form-old').classList.add('active');
+                document.getElementById('receipt-old-content').style.display = 'block';
+                document.getElementById('receipt-type-label').innerText = 'Exchange / Valuation Quote';
+                calculateOldEstimates();
+            }
+        }
+
+        // Form A Math (New Jewellery)
+        function calculateNewEstimates() {
+            const metal = document.getElementById('new-metal-type').value;
+            const weight = parseFloat(document.getElementById('new-weight').value) || 0;
+            const makingPercent = parseFloat(document.getElementById('new-making').value) || 0;
+            const stones = parseFloat(document.getElementById('new-stones').value) || 0;
+
+            let ratePerGram = 0;
+            let label = '';
+            if (metal === 'gold24k') {
+                ratePerGram = rates.gold24k / 10;
+                label = 'Gold 24K';
+            } else if (metal === 'gold22k') {
+                ratePerGram = rates.gold22k / 10;
+                label = 'Gold 22K';
+            } else {
+                ratePerGram = rates.silver / 1000;
+                label = 'Sterling Silver';
+            }
+
+            const metalCost = weight * ratePerGram;
+            const makingCost = metalCost * (makingPercent / 100);
+            const subtotal = metalCost + makingCost + stones;
+            const gst = subtotal * 0.03;
+            const total = subtotal + gst;
+
+            // Render receipt details
+            document.getElementById('rep-new-metal-label').innerText = label;
+            document.getElementById('rep-new-gram-rate').innerText = `₹${Math.round(ratePerGram).toLocaleString('en-IN')}/g`;
+            document.getElementById('rep-new-weight').innerText = `${weight.toFixed(2)} grams`;
+            document.getElementById('rep-new-metal-cost').innerText = `₹${Math.round(metalCost).toLocaleString('en-IN')}`;
+            document.getElementById('rep-new-stones-cost').innerText = `₹${stones.toLocaleString('en-IN')}`;
+            document.getElementById('rep-new-making-cost').innerText = `₹${Math.round(makingCost).toLocaleString('en-IN')} (${makingPercent}%)`;
+            document.getElementById('rep-new-gst').innerText = `₹${Math.round(gst).toLocaleString('en-IN')}`;
+            document.getElementById('rep-new-total').innerText = `₹${Math.round(total).toLocaleString('en-IN')}`;
+        }
+
+        // Dropdown toggle for old metal pure selectors
+        function handleOldMetalChange() {
+            const metal = document.getElementById('old-metal-type').value;
+            if (metal === 'gold') {
+                document.getElementById('group-gold-purity').style.display = 'flex';
+                document.getElementById('group-silver-purity').style.display = 'none';
+            } else {
+                document.getElementById('group-gold-purity').style.display = 'none';
+                document.getElementById('group-silver-purity').style.display = 'flex';
+            }
+            calculateOldEstimates();
+        }
+
+        // Form B Math (Old Jewellery exchange)
+        function calculateOldEstimates() {
+            const metal = document.getElementById('old-metal-type').value;
+            const grossWeight = parseFloat(document.getElementById('old-weight').value) || 0;
+            const stoneWeight = parseFloat(document.getElementById('old-stone-weight').value) || 0;
+            const wastagePercent = parseFloat(document.getElementById('old-wastage').value) || 0;
+
+            let netWeight = grossWeight - stoneWeight;
+            if (netWeight < 0) netWeight = 0;
+
+            let adjustedRate = 0;
+            let metalLabel = '';
+            let purityLabel = '';
+
+            if (metal === 'gold') {
+                metalLabel = 'Gold Ornaments';
+                const karat = document.getElementById('old-purity-gold').value;
+                purityLabel = `${karat}K Gold`;
+                
+                // Karat purity factor (24K = 100%, 22K = 91.6%, etc.)
+                let purityFactor = 1.0;
+                if (karat === '22') purityFactor = 0.916;
+                else if (karat === '20') purityFactor = 0.833;
+                else if (karat === '18') purityFactor = 0.750;
+                else if (karat === '14') purityFactor = 0.585;
+                
+                adjustedRate = (rates.gold24k / 10) * purityFactor;
+            } else {
+                metalLabel = 'Silver Ornaments';
+                const purity = document.getElementById('old-purity-silver').value;
+                purityLabel = `${purity}% Silver`;
+                
+                const purityFactor = parseFloat(purity) / 100;
+                adjustedRate = (rates.silver / 1000) * purityFactor;
+            }
+
+            // Calculation
+            const grossVal = netWeight * adjustedRate;
+            const wastageCost = grossVal * (wastagePercent / 100);
+            const netVal = grossVal - wastageCost;
+
+            // Render old receipt details
+            document.getElementById('rep-old-metal-label').innerText = metalLabel;
+            document.getElementById('rep-old-purity-label').innerText = purityLabel;
+            document.getElementById('rep-old-gross-weight').innerText = `${grossWeight.toFixed(2)}g`;
+            document.getElementById('rep-old-stone-deduction').innerText = `-${stoneWeight.toFixed(2)}g`;
+            document.getElementById('rep-old-net-weight').innerText = `${netWeight.toFixed(2)}g`;
+            document.getElementById('rep-old-gram-rate').innerText = `₹${Math.round(adjustedRate).toLocaleString('en-IN')}/g`;
+            document.getElementById('rep-old-gross-val').innerText = `₹${Math.round(grossVal).toLocaleString('en-IN')}`;
+            document.getElementById('rep-old-wastage-deduction').innerText = `-₹${Math.round(wastageCost).toLocaleString('en-IN')} (${wastagePercent}%)`;
+            document.getElementById('rep-old-net-val').innerText = `₹${Math.round(netVal).toLocaleString('en-IN')}`;
+        }
+
+        // Initialize rates on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadRates();
+            calculateNewEstimates();
+        });
+    </script>
+</body>
+</html>

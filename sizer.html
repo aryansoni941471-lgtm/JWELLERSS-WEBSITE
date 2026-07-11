@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Size Guide - LAXMINARAYAN JWELLERS</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+        }
+        .sizer-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--bg-surface);
+            padding: 30px;
+            border-radius: var(--border-radius-md);
+            border: 1px solid var(--gold-border);
+            text-align: center;
+        }
+        h2 {
+            color: var(--text-gold);
+            margin-bottom: 10px;
+        }
+        .instructions {
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+        .toggle-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .toggle-btn {
+            background: transparent;
+            color: var(--text-gold);
+            border: 1px solid var(--text-gold);
+            padding: 10px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .toggle-btn.active {
+            background: var(--gold-gradient);
+            color: #000;
+            border: none;
+        }
+        
+        .sizer-visual-area {
+            position: relative;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+            border: 1px dashed rgba(212, 175, 55, 0.3);
+            overflow: hidden;
+        }
+        
+        .circle-indicator {
+            border: 3px solid var(--gold-primary);
+            border-radius: 50%;
+            transition: width 0.1s, height 0.1s;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+            position: relative;
+        }
+        
+        /* Crosshairs for visual alignment */
+        .circle-indicator::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -20px;
+            right: -20px;
+            height: 1px;
+            background: rgba(212, 175, 55, 0.3);
+            z-index: -1;
+        }
+        .circle-indicator::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: -20px;
+            bottom: -20px;
+            width: 1px;
+            background: rgba(212, 175, 55, 0.3);
+            z-index: -1;
+        }
+
+        .slider-container {
+            margin: 30px 0;
+            padding: 0 20px;
+        }
+        
+        .size-slider {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            outline: none;
+        }
+        
+        .size-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: var(--gold-primary);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+
+        .result-box {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            display: inline-block;
+            min-width: 250px;
+        }
+        
+        .result-title {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        
+        .result-value {
+            color: var(--text-gold);
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .result-sub {
+            color: white;
+            font-size: 1rem;
+            margin-top: 5px;
+        }
+
+        /* Screen Calibration UI */
+        .calibration-banner {
+            background: rgba(212, 175, 55, 0.1);
+            border-left: 4px solid var(--gold-primary);
+            padding: 10px 15px;
+            text-align: left;
+            margin-bottom: 20px;
+            border-radius: 0 4px 4px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .calibration-banner p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .calibration-btn {
+            background: transparent;
+            color: var(--text-gold);
+            border: 1px solid var(--text-gold);
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .calibration-btn:hover {
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        #calibration-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .calibration-content {
+            background: var(--bg-surface);
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid var(--gold-border);
+            max-width: 500px;
+            text-align: center;
+        }
+        
+        .card-placeholder {
+            width: 85.6mm; /* Standard credit card width */
+            height: 53.98mm;
+            border: 2px solid var(--gold-primary);
+            border-radius: 8px;
+            margin: 20px auto;
+            background: rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="btn btn-secondary back-btn-top" style="margin-bottom: 20px; display: inline-block; text-decoration: none; background: transparent; border: 1px solid var(--text-gold); color: var(--text-gold); padding: 10px 20px; border-radius: 4px;">&larr; Back to Main Site</a>
+
+    <div class="sizer-container">
+        <h2>Digital Size Guide</h2>
+        <p class="instructions">Place your existing ring or bangle on the circle below and adjust the slider until the yellow line matches the <strong>inner edge</strong> of your jewelry.</p>
+        
+        <!-- Calibration Warning -->
+        <div class="calibration-banner">
+            <p>For 100% accurate results, please calibrate your screen size first.</p>
+            <button class="calibration-btn" onclick="openCalibration()">Calibrate Screen</button>
+        </div>
+
+        <div class="toggle-group">
+            <button class="toggle-btn active" id="btn-ring" onclick="setMode('ring')">Measure Ring</button>
+            <button class="toggle-btn" id="btn-bangle" onclick="setMode('bangle')">Measure Bangle</button>
+        </div>
+
+        <div class="sizer-visual-area">
+            <!-- The dynamic circle -->
+            <div class="circle-indicator" id="dynamic-circle" style="width: 50px; height: 50px;"></div>
+        </div>
+
+        <div class="slider-container">
+            <input type="range" id="size-slider" class="size-slider" min="0" max="100" value="50" oninput="updateSize()">
+        </div>
+
+        <div class="result-box">
+            <div class="result-title" id="result-label">Estimated Ring Size (Indian)</div>
+            <div class="result-value" id="result-size">12</div>
+            <div class="result-sub" id="result-diameter">Inner Diameter: 16.5 mm</div>
+        </div>
+    </div>
+
+    <!-- Calibration Modal -->
+    <div id="calibration-modal">
+        <div class="calibration-content">
+            <h3 style="color: var(--text-gold); margin-bottom: 10px;">Calibrate Your Screen</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">Different screens have different pixel densities. Place a standard credit/debit card on the screen and adjust the slider until the box exactly matches your physical card's width.</p>
+            
+            <div class="card-placeholder" id="card-box">
+                Place Credit Card Here
+            </div>
+            
+            <input type="range" id="calib-slider" class="size-slider" min="50" max="150" value="100" oninput="adjustCalibration()" style="margin: 20px 0;">
+            
+            <button class="toggle-btn active" onclick="saveCalibration()" style="width: 100%; margin-top: 10px;">Save & Continue</button>
+        </div>
+    </div>
+
+    <script src="sizer.js"></script>
+</body>
+</html>

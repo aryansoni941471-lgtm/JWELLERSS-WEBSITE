@@ -1,0 +1,17 @@
+{
+  "name": "ljs-jewellery",
+  "version": "1.0.0",
+  "description": "LAXMINARAYAN JWELLERS - Luxury Gold & Silver Collections website",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "nodemailer": "^9.0.1",
+    "pdfkit": "^0.19.1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

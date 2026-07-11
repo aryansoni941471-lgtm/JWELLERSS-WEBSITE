@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Certificate of Authenticity</title>
+    <link href="https://fonts.googleapis.com/css2?family=Georgia:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .certificate-container {
+            width: 800px;
+            padding: 40px;
+            background: linear-gradient(135deg, #fff 0%, #fdfbf7 100%);
+            border: 2px solid #d4af37;
+            position: relative;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin: 20px;
+        }
+        .corner {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 3px solid #d4af37;
+        }
+        .top-left { top: 15px; left: 15px; border-right: none; border-bottom: none; }
+        .top-right { top: 15px; right: 15px; border-left: none; border-bottom: none; }
+        .bottom-left { bottom: 15px; left: 15px; border-right: none; border-top: none; }
+        .bottom-right { bottom: 15px; right: 15px; border-left: none; border-top: none; }
+        
+        h1.brand {
+            color: #d4af37;
+            margin: 0;
+            font-size: 32px;
+            letter-spacing: 2px;
+            font-family: 'Georgia', serif;
+        }
+        p.subtitle {
+            color: #666;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 40px;
+        }
+        h2.title {
+            color: #d4af37;
+            font-size: 38px;
+            font-family: 'Georgia', serif;
+            margin-bottom: 10px;
+        }
+        p.certifies {
+            color: #555;
+            font-style: italic;
+            font-size: 18px;
+            margin-bottom: 40px;
+            font-family: 'Georgia', serif;
+        }
+        .details {
+            font-size: 18px;
+            margin-bottom: 40px;
+            color: #111;
+        }
+        .details strong {
+            color: #d4af37;
+        }
+        .guarantee {
+            font-size: 16px;
+            text-align: left;
+            background: rgba(212, 175, 55, 0.05);
+            padding: 20px;
+            border-radius: 5px;
+            margin: 0 auto 50px auto;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+        .signatures {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 50px;
+        }
+        .signature-block {
+            border-top: 1px solid #333;
+            padding-top: 10px;
+            width: 250px;
+        }
+        .signature-block p {
+            margin: 5px 0;
+        }
+        .print-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: #d4af37;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .print-btn:hover {
+            background: #b5952f;
+        }
+        @media print {
+            body { background: #fff; display: block; margin: 0; }
+            .certificate-container { box-shadow: none; border: 2px solid #d4af37; width: 100%; height: auto; margin: 0; max-width: none; }
+            .print-btn { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="print-btn" onclick="window.print()">🖨️ Print Certificate</button>
+
+    <div class="certificate-container">
+        <div class="corner top-left"></div>
+        <div class="corner top-right"></div>
+        <div class="corner bottom-left"></div>
+        <div class="corner bottom-right"></div>
+
+        <h1 class="brand">LAXMINARAYAN JWELLERS</h1>
+        <p class="subtitle">Luxury Gold & Silver Collections</p>
+
+        <h2 class="title">CERTIFICATE OF AUTHENTICITY</h2>
+        <p class="certifies">This document certifies the authenticity and quality of the jewellery pieces.</p>
+
+        <div class="details">
+            <p>This is to certify that the items under Order Ref: <strong id="cert-order-id">Loading...</strong></p>
+            <p>Purchased by: <strong id="cert-customer-name">Loading...</strong></p>
+        </div>
+
+        <div class="guarantee">
+            Are guaranteed to be crafted with genuine materials as specified, meeting the highest standards of quality and workmanship by LAXMINARAYAN JWELLERS.
+            <ul id="cert-items" style="margin-top: 15px; padding-left: 20px; color: #333;">
+                <!-- Items list -->
+            </ul>
+        </div>
+
+        <div class="signatures">
+            <div class="signature-block">
+                <p><strong>Authorized Signatory</strong></p>
+                <p style="color: #777;">LAXMINARAYAN JWELLERS</p>
+            </div>
+            <div class="signature-block">
+                <p><strong>Date of Issue</strong></p>
+                <p style="color: #777;" id="cert-date">Loading...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderId = urlParams.get('orderId');
+
+            if (!orderId) {
+                document.getElementById('cert-order-id').innerText = "INVALID ORDER ID";
+                return;
+            }
+
+            const orders = JSON.parse(localStorage.getItem('ljs_orders')) || [];
+            const order = orders.find(o => o.orderId === orderId);
+
+            if (!order) {
+                document.getElementById('cert-order-id').innerText = "ORDER NOT FOUND";
+                return;
+            }
+
+            document.getElementById('cert-order-id').innerText = order.orderId;
+            document.getElementById('cert-customer-name').innerText = order.customerName;
+            
+            // Extract just the date part, ignore time if possible
+            const dateStr = order.dateTime.split(',')[0];
+            document.getElementById('cert-date').innerText = dateStr;
+
+            const itemsList = document.getElementById('cert-items');
+            order.items.forEach(item => {
+                const li = document.createElement('li');
+                li.style.marginBottom = "5px";
+                li.innerHTML = `<strong>${item.name}</strong> - <span style="text-transform: capitalize;">${item.metalType}</span> (${item.weight}g)`;
+                itemsList.appendChild(li);
+            });
+        });
+    </script>
+</body>
+</html>

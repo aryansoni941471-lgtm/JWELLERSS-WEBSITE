@@ -1,0 +1,318 @@
+{
+  "rates": {
+    "gold24k": 146000,
+    "gold22k": 142900,
+    "silver": 231000
+  },
+  "inventory": [
+    {
+      "id": "ljs-001",
+      "name": "Royal Diamond Solitaire Ring",
+      "category": "rings",
+      "description": "An exquisite 22k gold ring features a brilliant 1-carat round cut diamond, perfect for engagements and special occasions.",
+      "metalType": "gold22k",
+      "weight": 6.5,
+      "makingChargesPercent": 12,
+      "stoneCharges": 45000,
+      "image": "images/gold_ring.png",
+      "featured": true
+    },
+    {
+      "id": "ljs-002",
+      "name": "Majestic Ruby & Gold Bridal Necklace",
+      "category": "necklaces",
+      "description": "A breathtaking bridal necklace crafted in 22k gold, adorned with shimmering round diamonds and rich red Burmese rubies.",
+      "metalType": "gold22k",
+      "weight": 38.2,
+      "makingChargesPercent": 15,
+      "stoneCharges": 120000,
+      "image": "images/gold_necklace.png",
+      "featured": true
+    },
+    {
+      "id": "ljs-003",
+      "name": "Filigree Drop Gold Earrings",
+      "category": "earrings",
+      "description": "Delicate 22k gold drop earrings featuring traditional Indian filigree metalwork with elegant dangling freshwater pearls.",
+      "metalType": "gold22k",
+      "weight": 8.4,
+      "makingChargesPercent": 10,
+      "stoneCharges": 8000,
+      "image": "images/gold_earrings.png",
+      "featured": true
+    },
+    {
+      "id": "ljs-004",
+      "name": "Sterling Silver Vintage Chain Bracelet",
+      "category": "bracelets",
+      "description": "Handcrafted solid 925 sterling silver chain bracelet with oxidized vintage engravings and a secure safety clasp.",
+      "metalType": "silver",
+      "weight": 24.5,
+      "makingChargesPercent": 8,
+      "stoneCharges": 1500,
+      "image": "images/silver_bracelet.png",
+      "featured": true
+    },
+    {
+      "id": "ljs-7309",
+      "name": "Gents Ring",
+      "category": "rings",
+      "metalType": "gold22k",
+      "weight": 5,
+      "makingChargesPercent": 10,
+      "stoneCharges": 1450,
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQyaKInP8DRW2VoOrpPAo-QiQ4KFqc7E5J9fsxWMF8OQ&s=10",
+      "description": "antique  item  ever",
+      "featured": false
+    }
+  ],
+  "orders": [
+    {
+      "orderId": "ORD-914663",
+      "customerName": "Aryan Soni",
+      "customerEmail": "aryansoni941471@gmail.com",
+      "itemsSummary": "Gents Ring x1 (5.00g)",
+      "items": [
+        {
+          "id": "ljs-7309",
+          "name": "Gents Ring",
+          "metalType": "gold22k",
+          "weight": 5,
+          "makingChargesPercent": 10,
+          "stoneCharges": 1450,
+          "quantity": 1,
+          "metalCost": 71450,
+          "baseCost": 72900,
+          "makingCost": 7290,
+          "subtotal": 80190,
+          "gst": 2405.7,
+          "finalPrice": 82596,
+          "totalAmount": 82596
+        }
+      ],
+      "totalWeight": "5.00g",
+      "totalAmount": "₹82,596",
+      "dateTime": "8/7/2026, 5:49:34 pm",
+      "status": "Approved",
+      "address": "near pnb bank kumher",
+      "mobile": "9216953892",
+      "paymentMethod": "Cash on Delivery (COD)"
+    },
+    {
+      "orderId": "ORD-346782",
+      "customerName": "Ayushi Soni",
+      "customerEmail": "aryansoni921695@gmail.com",
+      "itemsSummary": "Royal Diamond Solitaire Ring x1 (6.50g)",
+      "items": [
+        {
+          "id": "ljs-001",
+          "name": "Royal Diamond Solitaire Ring",
+          "metalType": "gold22k",
+          "weight": 6.5,
+          "makingChargesPercent": 12,
+          "stoneCharges": 45000,
+          "quantity": 1,
+          "metalCost": 93665,
+          "baseCost": 138665,
+          "makingCost": 16639.8,
+          "subtotal": 155304.8,
+          "gst": 4659.143999999999,
+          "finalPrice": 159964,
+          "totalAmount": 159964
+        }
+      ],
+      "totalWeight": "6.50g",
+      "totalAmount": "₹1,59,964",
+      "dateTime": "6/16/2026, 5:28:26 PM",
+      "status": "Approved",
+      "address": "near pnb bank",
+      "mobile": "9216953892",
+      "paymentMethod": "Cash on Delivery (COD)"
+    },
+    {
+      "orderId": "ORD-831757",
+      "customerName": "Aryan Soni",
+      "customerEmail": "ayushisoni7976@gmail.com",
+      "itemsSummary": "Royal Diamond Solitaire Ring x1 (6.50g)",
+      "items": [
+        {
+          "id": "ljs-001",
+          "name": "Royal Diamond Solitaire Ring",
+          "metalType": "gold22k",
+          "weight": 6.5,
+          "makingChargesPercent": 12,
+          "stoneCharges": 45000,
+          "quantity": 1,
+          "metalCost": 43225,
+          "baseCost": 88225,
+          "makingCost": 10587,
+          "subtotal": 98812,
+          "gst": 2964.3599999999997,
+          "finalPrice": 101776,
+          "totalAmount": 101776
+        }
+      ],
+      "totalWeight": "6.50g",
+      "totalAmount": "₹1,01,776",
+      "dateTime": "6/4/2026, 10:44:50 PM",
+      "status": "Declined",
+      "address": "near pnb bank dhanwara road kumher",
+      "mobile": "9216953892",
+      "paymentMethod": "UPI (UTR: 123356789)"
+    }
+  ],
+  "users": [
+    {
+      "email": "aryansoni941471@gmail.com",
+      "password": "admin123",
+      "name": "LAXMINARAYAN Admin",
+      "role": "admin",
+      "goldBalance": 0.3425,
+      "silverBalance": 2.1645
+    },
+    {
+      "email": "customer@gmail.com",
+      "password": "customer123",
+      "name": "Rohan Sharma",
+      "role": "customer",
+      "goldBalance": 5.5,
+      "silverBalance": 250
+    },
+    {
+      "name": "Aryan Soni",
+      "email": "ayushisoni7976@gmail.com",
+      "password": "Aryan@123",
+      "role": "customer"
+    },
+    {
+      "name": "Aryan Soni",
+      "email": "aryansoni941471@gmail.com",
+      "password": "Aryan@123",
+      "role": "customer"
+    },
+    {
+      "name": "Ayushi Soni",
+      "email": "aryansoni921695@gmail.com",
+      "password": "Ayushi@123",
+      "role": "customer"
+    },
+    {
+      "email": "staff@gmail.com",
+      "password": "staff",
+      "name": "Shop Cashier",
+      "role": "staff",
+      "goldBalance": 0,
+      "silverBalance": 0
+    }
+  ],
+  "transactions": [
+    {
+      "txId": "TX-125568",
+      "customerEmail": "aryansoni941471@gmail.com",
+      "customerName": "Aryan Soni",
+      "metal": "silver",
+      "type": "buy",
+      "weight": "2.1645g",
+      "amount": "₹500",
+      "status": "Approved",
+      "dateTime": "9/7/2026, 8:24:48 am",
+      "paymentDetails": "UPI (UTR: 123456789789)"
+    },
+    {
+      "txId": "TX-998408",
+      "customerEmail": "aryansoni941471@gmail.com",
+      "customerName": "Aryan Soni",
+      "metal": "gold",
+      "type": "buy",
+      "weight": "0.3425g",
+      "amount": "₹5,000",
+      "status": "Approved",
+      "dateTime": "8/7/2026, 5:52:25 pm",
+      "paymentDetails": "UPI (UTR: 123456789876)"
+    }
+  ],
+  "schemes": [
+    {
+      "id": "SCH-11-1",
+      "name": "11+1 Golden Harvest",
+      "durationMonths": 11,
+      "bonusMonths": 1,
+      "description": "Pay for 11 months and get 1 month installment free."
+    }
+  ],
+  "customerSchemes": [
+    {
+      "id": "SUB-001",
+      "customerId": "customer@gmail.com",
+      "customerName": "Rohan Sharma",
+      "schemeId": "SCH-11-1",
+      "schemeName": "11+1 Golden Harvest",
+      "monthlyEmi": 5000,
+      "startDate": "2026-06-01",
+      "totalInstallments": 11,
+      "paidInstallments": 4,
+      "status": "Active"
+    },
+    {
+      "id": "SUB-002",
+      "customerId": "aryansoni941471@gmail.com",
+      "customerName": "LAXMINARAYAN Admin",
+      "schemeId": "SCH-11-1",
+      "schemeName": "11+1 Golden Harvest",
+      "monthlyEmi": 2000,
+      "startDate": "2026-07-01",
+      "totalInstallments": 11,
+      "paidInstallments": 4,
+      "status": "Active"
+    },
+    {
+      "id": "SUB-50386",
+      "customerId": "customer@gmail.com",
+      "customerName": "Rohan Sharma",
+      "schemeId": "SCH-5-1-0383",
+      "schemeName": "play gold",
+      "monthlyEmi": 2411,
+      "startDate": "2026-07-02",
+      "totalInstallments": 5,
+      "paidInstallments": 2,
+      "status": "Active"
+    }
+  ],
+  "loans": [
+    {
+      "id": "LOAN-205338",
+      "customerName": "Aryan soni",
+      "mobile": "9216953892",
+      "address": "near pnb kumher",
+      "metalType": "Gold",
+      "carat": "22K",
+      "weight": 10,
+      "amountRequested": 114500,
+      "bankName": "pnb",
+      "accNo": "0738000100123345",
+      "ifsc": "pnbs1234567",
+      "monthlyInterestRate": 1.5,
+      "image": "images/uploaded_1783508565520_4834.jpeg",
+      "status": "Approved & Money Transferred",
+      "dateApplied": "8/7/2026, 4:32:45 pm"
+    },
+    {
+      "id": "LOAN-745790",
+      "customerEmail": "aryansoni941471@gmail.com",
+      "customerName": "Aryan soni",
+      "mobile": "9216953892",
+      "address": "near pnb kumher",
+      "metalType": "Gold",
+      "carat": "24K",
+      "weight": 10,
+      "amountRequested": 114500,
+      "bankName": "pnb",
+      "accNo": "0738000100123345",
+      "ifsc": "pnbs1234567",
+      "monthlyInterestRate": 1.5,
+      "image": "images/uploaded_1783510632135_2910.jpeg",
+      "status": "Approved & Money Transferred",
+      "dateApplied": "8/7/2026, 5:07:12 pm"
+    }
+  ]
+}

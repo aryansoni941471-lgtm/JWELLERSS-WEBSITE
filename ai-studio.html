@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Design Studio - LAXMINARAYAN JWELLERS</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+        }
+        
+        /* Modern Header for AI Studio */
+        .ai-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(212,175,55,0.1) 0%, rgba(0,0,0,0.5) 100%);
+            border-radius: var(--border-radius-md);
+            border-bottom: 2px solid var(--gold-primary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ai-header::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(212,175,55,0.15) 0%, transparent 60%);
+            animation: rotateGlow 10s linear infinite;
+        }
+        
+        @keyframes rotateGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .ai-title {
+            color: var(--text-gold);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .ai-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .ai-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Futuristic Tabs */
+        .ai-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .ai-tab-btn {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid var(--gold-border);
+            color: var(--text-secondary);
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ai-tab-btn.active {
+            background: rgba(212,175,55,0.15);
+            color: var(--text-gold);
+            border-color: var(--gold-primary);
+            box-shadow: 0 0 15px rgba(212,175,55,0.2);
+        }
+
+        .ai-tab-content {
+            display: none;
+            background: var(--bg-surface);
+            padding: 40px;
+            border-radius: 12px;
+            border: 1px solid rgba(212,175,55,0.3);
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .ai-tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Form Elements */
+        .ai-label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--text-gold);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .ai-textarea {
+            width: 100%;
+            height: 120px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--gold-border);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1rem;
+            resize: vertical;
+            margin-bottom: 20px;
+        }
+
+        .ai-textarea:focus {
+            outline: none;
+            border-color: var(--gold-primary);
+            box-shadow: 0 0 10px rgba(212,175,55,0.2);
+        }
+
+        .ai-btn-generate {
+            background: linear-gradient(90deg, #d4af37, #f3e5ab, #d4af37);
+            background-size: 200% auto;
+            color: #000;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.5s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ai-btn-generate:hover {
+            background-position: right center;
+            box-shadow: 0 0 20px rgba(212,175,55,0.6);
+        }
+
+        /* Upload Area for Outfit Matchmaker */
+        .ai-upload-area {
+            border: 2px dashed rgba(212,175,55,0.5);
+            padding: 40px;
+            text-align: center;
+            border-radius: 12px;
+            background: rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .ai-upload-area:hover {
+            background: rgba(212,175,55,0.05);
+            border-color: var(--gold-primary);
+        }
+
+        /* Loading & Results Area */
+        .ai-loading {
+            display: none;
+            text-align: center;
+            margin-top: 30px;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(212,175,55,0.3);
+            border-top: 3px solid var(--gold-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .ai-result-area {
+            display: none;
+            margin-top: 40px;
+            border-top: 1px solid rgba(212,175,55,0.2);
+            padding-top: 30px;
+        }
+
+        .result-image-wrapper {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--gold-primary);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .result-image-wrapper img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .watermark {
+            position: absolute;
+            bottom: 10px;
+            right: 15px;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+        }
+
+        .ai-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="btn btn-secondary back-btn-top" style="margin-bottom: 20px; display: inline-block; text-decoration: none; background: transparent; border: 1px solid var(--text-gold); color: var(--text-gold); padding: 10px 20px; border-radius: 4px;">&larr; Back to Main Site</a>
+
+    <div class="ai-container">
+        
+        <div class="ai-header">
+            <h1 class="ai-title">LJS AI Design Studio ✨</h1>
+            <p class="ai-subtitle">Experience the future of luxury jewelry. Let our Artificial Intelligence bring your imagination to life.</p>
+        </div>
+
+        <div class="ai-tabs">
+            <button class="ai-tab-btn active" onclick="switchTab('design')">✏️ Custom AI Designer</button>
+            <button class="ai-tab-btn" onclick="switchTab('match')">👗 Outfit Matchmaker</button>
+        </div>
+
+        <!-- 1. Custom Designer Tab -->
+        <div id="tab-design" class="ai-tab-content active">
+            <h3 style="color: white; margin-bottom: 20px;">Describe Your Dream Jewelry</h3>
+            <label class="ai-label">Prompt</label>
+            <textarea id="ai-prompt" class="ai-textarea" placeholder="E.g., A stunning 22k rose gold ring with a large heart-shaped ruby in the center and small diamonds on the sides..."></textarea>
+            
+            <div style="text-align: center;">
+                <button class="ai-btn-generate" onclick="generateJewelryDesign()">
+                    ✨ Generate Design
+                </button>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loading-design" class="ai-loading">
+                <div class="spinner"></div>
+                <p style="color: var(--text-gold); font-size: 1.2rem;">AI is crafting your masterpiece...</p>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">(Analyzing prompt, sketching 3D model, applying textures)</p>
+            </div>
+
+            <!-- Result State -->
+            <div id="result-design" class="ai-result-area">
+                <h3 style="text-align: center; color: var(--text-gold); margin-bottom: 20px;">Your Custom Creation</h3>
+                <div class="result-image-wrapper">
+                    <img src="images/ai_mock_ring.png" alt="AI Generated Ring">
+                    <div class="watermark">Created by LJS AI</div>
+                </div>
+                <div class="ai-actions">
+                    <button class="ai-btn-generate" style="background: transparent; border: 1px solid var(--text-gold); color: var(--text-gold);">Download Image</button>
+                    <button class="ai-btn-generate" onclick="alert('Our master craftsmen will contact you shortly with a price quotation for this custom design!')">Request Quote to Build This</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Outfit Matchmaker Tab -->
+        <div id="tab-match" class="ai-tab-content">
+            <h3 style="color: white; margin-bottom: 20px;">Find The Perfect Match For Your Outfit</h3>
+            
+            <div class="ai-upload-area" id="upload-box" onclick="document.getElementById('outfit-file').click()">
+                <div style="font-size: 3rem; margin-bottom: 10px;">📸</div>
+                <h4 style="color: var(--text-gold); margin-bottom: 5px;">Click to Upload Outfit Photo</h4>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">(Upload a photo of your dress, saree, or lehenga)</p>
+                <input type="file" id="outfit-file" accept="image/*" style="display: none;" onchange="handleOutfitUpload(event)">
+            </div>
+            
+            <!-- Uploaded Preview -->
+            <div id="outfit-preview-container" style="display: none; text-align: center; margin-bottom: 20px;">
+                <img id="outfit-preview" src="" style="max-height: 150px; border-radius: 8px; border: 1px solid var(--gold-border);">
+                <br>
+                <button class="ai-btn-generate" style="margin-top: 15px;" onclick="findOutfitMatch()">
+                    🔍 Find Matching Jewelry
+                </button>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loading-match" class="ai-loading">
+                <div class="spinner"></div>
+                <p style="color: var(--text-gold); font-size: 1.2rem;">AI is analyzing your outfit...</p>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">(Extracting colors, determining style, scanning inventory)</p>
+            </div>
+
+            <!-- Result State -->
+            <div id="result-match" class="ai-result-area">
+                <h3 style="text-align: center; color: var(--text-gold); margin-bottom: 20px;">AI Recommended Match</h3>
+                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 20px;">Based on the colors and style of your outfit, our AI generated this perfect matching Kundan set.</p>
+                
+                <div class="result-image-wrapper">
+                    <img src="images/ai_mock_necklace.png" alt="AI Generated Necklace">
+                    <div class="watermark">AI Match Recommendation</div>
+                </div>
+                
+                <div class="ai-actions">
+                    <button class="ai-btn-generate" onclick="alert('This AI suggested design can be custom made for you! Please contact our store.')">Order Custom Make</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="ai-studio.js"></script>
+</body>
+</html>

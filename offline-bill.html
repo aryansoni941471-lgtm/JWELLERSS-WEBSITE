@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline Bill Generation - LAXMINARAYAN JWELLERS</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+        }
+        .bill-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .form-section, .preview-section {
+            background: var(--bg-surface);
+            padding: 20px;
+            border-radius: var(--border-radius-md);
+            border: 1px solid var(--gold-border);
+        }
+        h2 {
+            color: var(--text-gold);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .form-group {
+            flex: 1;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--text-secondary);
+        }
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--gold-border);
+            color: white;
+            border-radius: 4px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid rgba(212,175,55,0.2);
+        }
+        th {
+            color: var(--text-gold);
+        }
+        .btn {
+            background: var(--gold-gradient);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: opacity 0.3s;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .btn-danger {
+            background: #ff4444;
+            color: white;
+            padding: 5px 10px;
+        }
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--text-gold);
+            color: var(--text-gold);
+        }
+        
+        /* A4 Print Layout Styles */
+        .bill-template {
+            background: white;
+            color: black;
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm;
+            margin: 0 auto;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            position: relative;
+        }
+        .bill-header {
+            text-align: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .bill-header h1 {
+            margin: 0;
+            font-size: 28px;
+            color: #000;
+        }
+        .bill-header p {
+            margin: 5px 0 0;
+            font-size: 14px;
+        }
+        .bill-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .bill-table-print {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .bill-table-print th, .bill-table-print td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: right;
+        }
+        .bill-table-print th {
+            background-color: #f0f0f0;
+            text-align: center;
+            color: #000;
+        }
+        .bill-table-print td:first-child, .bill-table-print th:first-child {
+            text-align: left;
+        }
+        .bill-totals {
+            width: 300px;
+            margin-left: auto;
+        }
+        .bill-totals-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #ccc;
+        }
+        .bill-totals-row.grand-total {
+            font-weight: bold;
+            font-size: 18px;
+            border-bottom: 2px solid #000;
+            border-top: 2px solid #000;
+        }
+        .bill-footer {
+            position: absolute;
+            bottom: 20mm;
+            left: 20mm;
+            right: 20mm;
+            text-align: center;
+            font-size: 12px;
+            border-top: 1px solid #000;
+            padding-top: 10px;
+        }
+        .signature-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+        }
+        .signature-box {
+            text-align: center;
+            width: 200px;
+        }
+        .signature-line {
+            border-top: 1px solid #000;
+            margin-top: 40px;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .preview-section, .preview-section * {
+                visibility: visible;
+            }
+            .preview-section {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                margin: 0;
+                padding: 0;
+                border: none;
+                background: none;
+            }
+            .bill-template {
+                padding: 0;
+                width: 100%;
+                min-height: auto;
+            }
+            .print-hidden {
+                display: none !important;
+            }
+            /* Hide the back button in print */
+            .back-btn-top {
+                display: none !important;
+            }
+        }
+    </style>
+    <!-- Include html2pdf library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+    <a href="index.html" class="btn btn-secondary back-btn-top" style="margin-bottom: 20px; display: inline-block; text-decoration: none;">&larr; Back to Main Site</a>
+
+    <div class="bill-container">
+        <!-- Input Form Section -->
+        <div class="form-section print-hidden">
+            <h2>Create Invoice</h2>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Customer Name</label>
+                    <input type="text" id="cust-name" class="form-input" placeholder="Enter Name" oninput="updateBillPreview()">
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="text" id="cust-phone" class="form-input" placeholder="Enter Phone" oninput="updateBillPreview()">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Address</label>
+                    <input type="text" id="cust-address" class="form-input" placeholder="Enter Address" oninput="updateBillPreview()">
+                </div>
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" id="bill-date" class="form-input" onchange="updateBillPreview()">
+                </div>
+            </div>
+
+            <h3 style="color: var(--text-gold); margin-top: 20px;">Items</h3>
+            <table id="items-input-table">
+                <thead>
+                    <tr>
+                        <th>Item Details</th>
+                        <th style="width: 80px;">Wt (g)</th>
+                        <th style="width: 100px;">Rate/g</th>
+                        <th style="width: 80px;">MC (%)</th>
+                        <th>Total</th>
+                        <th>Act</th>
+                    </tr>
+                </thead>
+                <tbody id="items-input-body">
+                    <!-- Dynamic rows here -->
+                </tbody>
+            </table>
+            
+            <button class="btn btn-secondary" onclick="addItemRow()">+ Add Item</button>
+
+            <div style="margin-top: 30px; display: flex; gap: 10px; justify-content: flex-end;">
+                <button class="btn btn-secondary" style="background: #25D366; color: white; border: none;" onclick="sendWhatsApp()">💬 WhatsApp</button>
+                <button class="btn btn-secondary" onclick="printBill()">🖨️ Print</button>
+                <button class="btn btn-secondary" onclick="downloadPDF()">📄 Download PDF</button>
+            </div>
+        </div>
+
+        <!-- Preview Section -->
+        <div class="preview-section" style="overflow-x: auto;">
+            <div class="bill-template" id="bill-template">
+                <div class="bill-header">
+                    <h1>LAXMINARAYAN JWELLERS</h1>
+                    <p>LAXMINARAYAN Luxury Plaza, Sector 18, Noida, UP, India</p>
+                    <p>Phone: +91 98765 43210 | GSTIN: 09XXXXX1234X1ZX</p>
+                    <h3 style="text-decoration: underline; margin-top: 15px; color: black;">TAX INVOICE</h3>
+                </div>
+
+                <div class="bill-details">
+                    <div>
+                        <strong>Billed To:</strong><br>
+                        <span id="prev-cust-name">Customer Name</span><br>
+                        <span id="prev-cust-phone">Phone Number</span><br>
+                        <span id="prev-cust-address">Address</span>
+                    </div>
+                    <div style="text-align: right;">
+                        <strong>Invoice No:</strong> <span id="prev-invoice-no">INV-1001</span><br>
+                        <strong>Date:</strong> <span id="prev-date">DD/MM/YYYY</span>
+                    </div>
+                </div>
+
+                <table class="bill-table-print">
+                    <thead>
+                        <tr>
+                            <th>S.No</th>
+                            <th>Description</th>
+                            <th>Weight(g)</th>
+                            <th>Rate(₹)</th>
+                            <th>Making</th>
+                            <th>Amount(₹)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="prev-items-body">
+                        <!-- Items injected here -->
+                    </tbody>
+                </table>
+
+                <div class="bill-totals">
+                    <div class="bill-totals-row">
+                        <span>Subtotal:</span>
+                        <span id="prev-subtotal">₹0.00</span>
+                    </div>
+                    <div class="bill-totals-row">
+                        <span>GST (3%):</span>
+                        <span id="prev-gst">₹0.00</span>
+                    </div>
+                    <div class="bill-totals-row grand-total">
+                        <span>Grand Total:</span>
+                        <span id="prev-grand-total">₹0.00</span>
+                    </div>
+                </div>
+
+                <div class="signature-section">
+                    <div class="signature-box">
+                        <div class="signature-line">Customer Signature</div>
+                    </div>
+                    <div class="signature-box">
+                        <div class="signature-line">Authorised Signatory</div>
+                        <span style="font-size: 10px;">For LAXMINARAYAN JWELLERS</span>
+                    </div>
+                </div>
+
+                <div class="bill-footer">
+                    * This is a computer generated invoice. <br>
+                    * Goods once sold will not be taken back without original invoice. <br>
+                    * Subject to Noida Jurisdiction.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="offline-bill.js"></script>
+</body>
+</html>
